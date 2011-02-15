@@ -1,0 +1,85 @@
+<html>
+<script type="text/javascript">
+function updateValue() {
+    var jsonrequest = document.getElementById('jsonrequest')
+    var solution = document.getElementById('solution')
+    var tests = document.getElementById('tests')
+    var obj = {solution: solution.value, tests: tests.value}
+    jsonrequest.value = JSON.stringify(obj)
+}
+</script>
+<body>
+<h2>Python verifier</h2>
+
+<br>
+Solution code:<br>
+<textarea id="solution" rows="10" cols="80">
+int b=2;
+float f = 123.45;
+double inches = 69.0/12;
+NSString *string1 = @"This string is immutable";
+
+//test function
+int addOne(int x) {
+  return x + 1;
+}
+
+//test macro
+#define mul(a,b) ((a)*(b))
+
+//test class
+@interface Rectangle: NSObject {
+    int width;
+    int height;
+}
+-(int) area;
+-(void) setWidth: (int) w;
+-(void) setHeight: (int) h;
+-(int) width;
+-(int) height;
+@end
+
+@implementation Rectangle
+-(int) area {
+    return width * height;
+}
+-(void) setWidth: (int) w {
+    width = w;
+}
+-(void) setHeight: (int) h {
+    height = h;
+}
+-(int) width {
+    return width;
+}
+-(int) height {
+    return height;
+}
+@end
+</textarea>
+
+<br>
+Tests:<br>
+<textarea id="tests" rows="10" cols="80">
+AssertEquals(2, b);
+int expected_b = 2;
+AssertEquals(expected_b, b);
+AssertEquals((float)123.45, f);
+AssertEquals(69.0/12.0, inches);
+AssertEquals([NSString stringWithString:@"This string is immutable"], string1);
+
+AssertEquals(4, addOne(3));
+AssertEquals(42, mul(6, 7));
+
+Rectangle *r = [[Rectangle alloc] init];
+[r setWidth: 11];
+[r setHeight: 18];
+AssertEquals(198, [r area]);
+</textarea>
+<form action="/cgi-bin/webserver.py" method="POST">
+<input type="hidden" name="jsonrequest" id="jsonrequest"/>
+<input type="submit" onclick="updateValue()"></input>
+</form>
+</body>
+</html>
+
