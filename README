@@ -1,2 +1,7 @@
-objective-c-verifier is a programming language
-verifier for Objective-C used by Singpath.com
+objective-c-verifier is a programming language verifier for Objective-C used by Singpath.com
+
+Overtime, we'd like to create a Chef Recipe that could download the latest code for this verifier and any other Linux-based verifiers and deploy them to our Amazon Web Services or other IaaS accounts. 
+
+Have a look at this blog to learn a little more about Chef and the idea. Infrastructure as Code.
+
+http://blog.ibd.com/howto/deploy-wordpress-to-amazon-ec2-micro-instance-with-opscode-chef/
