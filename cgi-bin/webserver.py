@@ -204,6 +204,7 @@ int main( int argc, const char *argv[] ) {
         src_file = 'ObjCSolution_%s.m' % uid
         src_path = '/tmp/%s' % src_file
         binary_path = '/tmp/ObjCSolution_%s.out' % uid
+        result_path = '/tmp/ObjCSolution_%s.result' % uid
         f = open(src_path, 'w')
         f.write(code)
         f.close()
@@ -227,17 +228,24 @@ int main( int argc, const char *argv[] ) {
         compile_errors = self.grep(compileResult, '%s:[0-9]+: error:' % src_file)
         compile_errors = self.correct_line_numbers(compile_errors, src_file)
         if compile_errors:
-            jsonResult = {'errors': compile_warnings_and_errors}
+            jsonResult = {'errors': compile_warnings_and_errors[0:450]}
         else:
             #it probably compiled, look for test results
             if result and result[0] == '{' and result[-1] == '}':
                 jsonResult = json.loads(result)
             else: #other unecpected result
-                jsonResult = {'errors': '%s\n%s' % (compile_warnings_and_errors, result)}
-        jsonResult['printed'] = compile_warnings_and_errors
+                s = '%s\n%s' % (compile_warnings_and_errors, result)
+                jsonResult = {'errors': s[0:450]}
+        s = json.dumps(jsonResult)
+        if len(s) > 400:
+            compile_warnings_and_errors = ''
+        jsonResult['printed'] = compile_warnings_and_errors[0:450-len(s)]
         # Return the results
         s = json.dumps(jsonResult)
         print s
+        f = open(result_path, 'w')
+        f.write(s)
+        f.close()
         return
 
     def correct_line_numbers(self, string, src_file):
